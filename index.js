@@ -20,9 +20,9 @@ module.exports.parse = (event, spotText) => {
                 ] = {
                         type: 'file',
                         filename: item
-                            .match(/filename="[\w-\. ]+"/)[0]
+                            .match(/filename="[\w-\.\s]+"/)[0]
                             .split('=')[1]
-                            .match(/[\w-\.]+/)[0],
+                            .match(/[\w-.\s]+/)[0],
                         contentType: item
                             .match(/Content-Type: .+\r\n\r\n/)[0]
                             .replace(/Content-Type: /, '')
@@ -49,8 +49,17 @@ module.exports.parse = (event, spotText) => {
             ] = item
                 .split(/\r\n\r\n/)[1]
                 .split(/\r\n--/)[0];
+            console.log(result)
             return result;
         })
-        .reduce((accumulator, current) => Object.assign(accumulator, current), {});
+        .reduce((accumulator, current) => {
+            Object.keys(current)
+                .forEach(k => k in accumulator 
+                    ? Array.isArray(accumulator[k])
+                        ? accumulator[k].push(current[k])
+                        : accumulator[k] = [accumulator[k], current[k]]
+                    : accumulator[k] = current[k])
+            return accumulator
+        }, {});
     return body;
 };
