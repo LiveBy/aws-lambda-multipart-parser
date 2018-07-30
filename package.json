@@ -1,5 +1,5 @@
 {
-  "name": "aws-lambda-multipart-parser",
+  "name": "@liveby/aws-lambda-multipart-parser",
   "version": "0.1.2",
   "description": "Parser of multipart/form-data requests for AWS Lambda",
   "main": "index.js",
